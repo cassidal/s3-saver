@@ -37,7 +37,7 @@ func Main() {
 	router.Use(middleware.RequestID)
 	router.Use(logger.New(log))
 	router.Use(middleware.Recoverer)
-	router.Use(middleware.URLFormat)
+	//router.Use(middleware.URLFormat)
 
 	s3Service := service.NewS3Service(appConfig)
 	historyService := service.NewInMemoryHistory(appConfig.MaxCachedVideosUrl)
