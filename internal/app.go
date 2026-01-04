@@ -45,7 +45,7 @@ func Main() {
 
 	// Swagger документация
 	router.Get("/swagger/*", httpSwagger.Handler(
-		httpSwagger.URL("http://localhost:"+appConfig.HttpConfig.Port+"/swagger/doc.json"),
+		httpSwagger.URL("/swagger/doc.json"), // <--- Оставьте только это
 	))
 
 	// API routes
