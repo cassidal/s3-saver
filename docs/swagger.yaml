@@ -1,0 +1,72 @@
+basePath: /
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: API для загрузки видео в S3 хранилище
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: S3 Saver API
+  version: "1.0"
+paths:
+  /recent:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает список URL последних загруженных видео файлов (до 5
+        файлов)
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Список недавно загруженных файлов
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Получить список недавно загруженных файлов
+      tags:
+      - video
+  /upload/video:
+    post:
+      consumes:
+      - multipart/form-data
+      description: 'Загружает видео файл в S3 хранилище. Максимальный размер файла:
+        500 MB'
+      parameters:
+      - description: Видео файл для загрузки
+        in: formData
+        name: video
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешная загрузка
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Ошибка валидации (файл слишком большой или невалидный)
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Загрузить видео
+      tags:
+      - video
+schemes:
+- http
+- https
+swagger: "2.0"

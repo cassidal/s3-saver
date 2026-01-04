@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  s3-saver:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: s3-saver
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env  # Переменные окружения из файла .env
+    environment:
+      # Путь к конфигурационному файлу (внутренняя переменная контейнера)
+      APP_CONFIG_PATH: /root/config/local.yaml
+    # volumes:
+      # Раскомментируйте, если нужно монтировать конфиг с хоста для изменения настроек
+      # При использовании volume убедитесь, что файлы имеют правильные права: chmod 644 config/local.yaml
+      # - ./config:/root/config:ro
+    restart: unless-stopped
+
