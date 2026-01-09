@@ -37,20 +37,18 @@ func Main() {
 	router.Use(middleware.RequestID)
 	router.Use(logger.New(log))
 	router.Use(middleware.Recoverer)
-	//router.Use(middleware.URLFormat)
 
 	s3Service := service.NewS3Service(appConfig)
 	historyService := service.NewInMemoryHistory(appConfig.MaxCachedVideosUrl)
 	videoHandler := handlers.NewVideoHandler(s3Service, log, appConfig, historyService)
 
-	// Swagger документация
 	router.Get("/swagger/*", httpSwagger.Handler(
-		httpSwagger.URL("/swagger/doc.json"), // <--- Оставьте только это
+		httpSwagger.URL("/swagger/doc.json"),
 	))
 
-	// API routes
 	router.Post("/upload/video", videoHandler.Upload)
 	router.Get("/recent", videoHandler.GetRecentList)
+	router.Get("/video/latest", videoHandler.LatestVideoHandler)
 
 	server := &http.Server{
 		Addr:         appConfig.HttpConfig.Host + ":" + appConfig.HttpConfig.Port,

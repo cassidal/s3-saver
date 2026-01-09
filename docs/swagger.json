@@ -97,6 +97,38 @@
                     }
                 }
             }
+        },
+        "/video/latest": {
+            "get": {
+                "description": "Возвращает редирект (302) на URL самого свежего видео из S3 хранилища.",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "video"
+                ],
+                "summary": "Получить последнее видео (редирект)",
+                "responses": {
+                    "302": {
+                        "description": "Редирект на S3 URL последнего видео",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Нет доступных видео",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -100,3 +100,28 @@ func (h *VideoHandler) GetRecentList(w http.ResponseWriter, r *http.Request) {
 		"recent_files": urls,
 	})
 }
+
+// LatestVideoHandler возвращает ссылку на последнее загруженное видео через редирект
+// @Summary      Получить последнее видео (редирект)
+// @Description  Возвращает редирект (302) на URL самого свежего видео из S3 хранилища.
+//
+//	Идеально подходит для автоматизации скачивания без парсинга JSON.
+//
+// @Tags         video
+// @Produce      text/plain
+// @Success      302  {string}  string  "Редирект на S3 URL последнего видео"
+// @Failure      404  {string}  string  "Нет доступных видео"
+// @Failure      500  {string}  string  "Внутренняя ошибка сервера"
+// @Router       /video/latest [get]
+func (h *VideoHandler) LatestVideoHandler(w http.ResponseWriter, r *http.Request) {
+	urls := h.history.GetRecent()
+
+	if len(urls) == 0 {
+		http.Error(w, "No videos available", http.StatusNotFound)
+		return
+	}
+
+	latestURL := urls[0]
+
+	http.Redirect(w, r, latestURL, http.StatusFound)
+}
